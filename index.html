@@ -27,6 +27,7 @@
           <a href="#gallery">Gallery</a>
           <a href="#visit">Visit</a>
         </div>
+
         <div class="nav-right">
           <div class="nav-actions">
             <a
@@ -452,12 +453,12 @@
     </div>
     <script src="menu-data.js"></script>
     <script type="module">
-      import * as pdfjsLib from "./node_modules/pdfjs-dist/build/pdf.mjs";
+      import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs";
 
       const menuContainer = document.getElementById("menuPages");
       const menuCanvas = document.querySelector(".menu-canvas");
       const zoomButtons = document.querySelectorAll("[data-menu-zoom]");
-      const MENU_URL = "JacksonStreetMenu.pdf";
+      const MENU_URL = "./JacksonStreetMenu.pdf";
       let pdfDoc = null;
       let zoomLevel = 0.9;
 
@@ -500,10 +501,8 @@
           showMenuFallback();
           return;
         }
-        pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-          "./node_modules/pdfjs-dist/build/pdf.worker.min.mjs",
-          import.meta.url
-        ).href;
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs";
         try {
           try {
             if (!window.MENU_PDF_BASE64) throw new Error("No embedded menu data.");
