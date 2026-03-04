@@ -9,15 +9,23 @@
   <body>
     <div class="page">
       <header class="nav">
+        <div class="nav-top">
+          <div class="logo logo-center">
+            <img class="logo-image" src="logo.png" alt="Jackson Street Steaks logo" />
+          </div>
+          <button class="menu-toggle" type="button" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
         <div class="nav-links nav-left">
           <a href="#popular">Popular</a>
           <a href="#menu">Menu</a>
           <a href="#story">Our Story</a>
           <a href="#reviews">Reviews</a>
           <a href="#gallery">Gallery</a>
-        </div>
-        <div class="logo logo-center">
-          <img class="logo-image" src="logo.png" alt="Jackson Street Steaks logo" />
+          <a href="#visit">Visit</a>
         </div>
         <div class="nav-right">
           <div class="nav-actions">
@@ -189,10 +197,8 @@
             <div class="menu-toolbar">
               <span class="menu-label">Menu Preview</span>
               <div class="menu-actions">
-                <button class="ghost small" data-menu-zoom="out">Zoom Out</button>
-                <button class="ghost small" data-menu-zoom="in">Zoom In</button>
-                <span class="menu-zoom-level">100%</span>
-                <button class="ghost small" data-menu-zoom="reset">Reset Zoom</button>
+                <button class="ghost small" data-menu-zoom="out">-</button>
+                <button class="ghost small" data-menu-zoom="in">+</button>
                 <a class="ghost small" href="JacksonStreetMenu.pdf" target="_blank"
                   >Open Fullscreen</a
                 >
@@ -454,14 +460,10 @@
       const menuContainer = document.getElementById("menuPages");
       const menuCanvas = document.querySelector(".menu-canvas");
       const zoomButtons = document.querySelectorAll("[data-menu-zoom]");
-      const zoomLabel = document.querySelector(".menu-zoom-level");
       const MENU_URL = "JacksonStreetMenu.pdf";
       let pdfDoc = null;
       let zoomLevel = 0.9;
 
-      const updateZoomLabel = () => {
-        if (zoomLabel) zoomLabel.textContent = `${Math.round(zoomLevel * 100)}%`;
-      };
 
       const renderPage = async (page, index) => {
         const viewport = page.getViewport({ scale: 1 });
@@ -532,8 +534,7 @@
       const adjustZoom = async (direction) => {
         if (direction === "in") zoomLevel = Math.min(zoomLevel + 0.1, 1.6);
         if (direction === "out") zoomLevel = Math.max(zoomLevel - 0.1, 0.8);
-        if (direction === "reset") zoomLevel = 1;
-        updateZoomLabel();
+        
         await renderAllPages();
       };
 
@@ -548,7 +549,6 @@
         event.preventDefault();
         const delta = event.deltaY > 0 ? -0.02 : 0.02;
         zoomLevel = Math.min(Math.max(zoomLevel + delta, 0.8), 1.6);
-        updateZoomLabel();
         window.clearTimeout(wheelZoomTimeout);
         wheelZoomTimeout = window.setTimeout(() => {
           renderAllPages();
@@ -560,8 +560,18 @@
       }
 
       window.addEventListener("resize", () => renderAllPages());
-      updateZoomLabel();
       loadMenu();
+    </script>
+    <script>
+      const nav = document.querySelector(".nav");
+      const menuToggle = document.querySelector(".menu-toggle");
+
+      if (nav && menuToggle) {
+        menuToggle.addEventListener("click", () => {
+          const isOpen = nav.classList.toggle("open");
+          menuToggle.setAttribute("aria-expanded", String(isOpen));
+        });
+      }
     </script>
     <script>
       const revealTargets = document.querySelectorAll(
